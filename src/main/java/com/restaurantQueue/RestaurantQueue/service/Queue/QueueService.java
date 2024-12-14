@@ -1,5 +1,7 @@
 package com.restaurantQueue.RestaurantQueue.service.Queue;
 
+import com.restaurantQueue.RestaurantQueue.exceptions.UserAlreadyExistException;
+import com.restaurantQueue.RestaurantQueue.exceptions.UserNotFoundException;
 import com.restaurantQueue.RestaurantQueue.helper.QueueStatus;
 import com.restaurantQueue.RestaurantQueue.model.Queue.Queue;
 import com.restaurantQueue.RestaurantQueue.model.User.User;
@@ -28,10 +30,10 @@ public class QueueService {
     @Transactional
     public void addToQueue(String username) {
         User user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User Not Found"));
 
         if (user.getQueue() != null) {
-            throw new RuntimeException("User is already in the queue");
+            throw new UserAlreadyExistException("User is already in the queue");
         }
 
         int nextQueuePosition = queueRepository.countPendingQueues() + 1;
