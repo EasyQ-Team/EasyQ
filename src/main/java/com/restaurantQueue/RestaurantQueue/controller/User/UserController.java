@@ -5,8 +5,10 @@ import com.restaurantQueue.RestaurantQueue.dto.request.Auth.RegisterRequest;
 import com.restaurantQueue.RestaurantQueue.model.User.User;
 import com.restaurantQueue.RestaurantQueue.service.Auth.AuthService;
 import com.restaurantQueue.RestaurantQueue.service.Auth.JwtService;
+import com.restaurantQueue.RestaurantQueue.service.Auth.SSOLogin;
 import com.restaurantQueue.RestaurantQueue.service.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,6 +27,12 @@ public class UserController {
 
     @Autowired
     private JwtService jwtService;
+
+
+    @Autowired
+    @Qualifier("google-login")
+    private SSOLogin googleLogin;
+
 
     @Autowired
     AuthenticationManager authenticationManager;
