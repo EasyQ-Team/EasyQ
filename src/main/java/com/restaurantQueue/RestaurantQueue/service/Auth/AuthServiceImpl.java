@@ -28,17 +28,12 @@ public class AuthServiceImpl implements AuthService{
     @Autowired
     JwtService jwtService;
 
-    @Autowired
-    UserService userService;
 
     public AuthServiceImpl() {
-
         emailValidator =new EmailValidator();
         passwordValidator =new PasswordValidator();
         bCryptPasswordEncoder =new BCryptPasswordEncoder(12);
     }
-
-
 
     @Override
     public User register(RegisterRequest registerRequest) {
@@ -53,7 +48,14 @@ public class AuthServiceImpl implements AuthService{
         }
 
         //register the user
-        userService.saveUser(registerRequest);
+        User user = new User();
+        user.setUsername(registerRequest.getUsername());
+        user.setEmail(registerRequest.getEmail());
+        user.setPhoneNumber(registerRequest.getPhoneNumber());
+        user.setPassword(bCryptPasswordEncoder.encode(registerRequest.getPassword()));
+        user.setRoles(registerRequest.getRoles());
+
+        userRepository.save(user);
 
         //fetch the user generate token and return response
         User responseUser = userRepository.findByEmail(registerRequest.getEmail()).orElseThrow(
@@ -76,9 +78,6 @@ public class AuthServiceImpl implements AuthService{
 
 
         //return the user with token
-
         return Optional.empty();
-
-
     }
 }
