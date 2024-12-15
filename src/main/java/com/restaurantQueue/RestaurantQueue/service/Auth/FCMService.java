@@ -3,7 +3,7 @@ package com.restaurantQueue.RestaurantQueue.service.Auth;
 import com.google.firebase.messaging.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.restaurantQueue.RestaurantQueue.request.Notification.NotificationRequest;
+import com.restaurantQueue.RestaurantQueue.dto.request.Notification.NotificationRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

@@ -25,6 +25,8 @@ public class User extends BaseEntity {
 
     private String roles;
 
+    private String token;
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Queue queue;
 }

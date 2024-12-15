@@ -1,7 +1,7 @@
 package com.restaurantQueue.RestaurantQueue.controller.Notification;
 
-import com.restaurantQueue.RestaurantQueue.request.Notification.NotificationRequest;
-import com.restaurantQueue.RestaurantQueue.request.Notification.NotificationResponse;
+import com.restaurantQueue.RestaurantQueue.dto.request.Notification.NotificationRequest;
+import com.restaurantQueue.RestaurantQueue.dto.request.Notification.NotificationResponse;
 import com.restaurantQueue.RestaurantQueue.service.Auth.FCMService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

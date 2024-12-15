@@ -1,4 +1,4 @@
-package com.restaurantQueue.RestaurantQueue.request.Menu;
+package com.restaurantQueue.RestaurantQueue.dto.request.Menu;
 
 import com.google.firebase.database.annotations.NotNull;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.restaurantQueue.RestaurantQueue.request.Auth;
+package com.restaurantQueue.RestaurantQueue.dto.request.Auth;
 
 import lombok.Data;
 

@@ -3,7 +3,7 @@ package com.restaurantQueue.RestaurantQueue.service.Menu;
 import com.restaurantQueue.RestaurantQueue.helper.MenuCategoryMapper;
 import com.restaurantQueue.RestaurantQueue.model.Menu.MenuCategory;
 import com.restaurantQueue.RestaurantQueue.repository.MenuCategoryRepository;
-import com.restaurantQueue.RestaurantQueue.request.Menu.MenuCategoryRequest;
+import com.restaurantQueue.RestaurantQueue.dto.request.Menu.MenuCategoryRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

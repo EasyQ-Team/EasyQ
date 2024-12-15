@@ -1,7 +1,7 @@
 package com.restaurantQueue.RestaurantQueue.controller.Menu;
 
 import com.restaurantQueue.RestaurantQueue.model.Menu.MenuCategory;
-import com.restaurantQueue.RestaurantQueue.request.Menu.MenuCategoryRequest;
+import com.restaurantQueue.RestaurantQueue.dto.request.Menu.MenuCategoryRequest;
 import com.restaurantQueue.RestaurantQueue.service.Menu.MenuCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

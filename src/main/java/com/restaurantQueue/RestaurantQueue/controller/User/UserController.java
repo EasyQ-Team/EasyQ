@@ -1,7 +1,9 @@
 package com.restaurantQueue.RestaurantQueue.controller.User;
 
-import com.restaurantQueue.RestaurantQueue.request.Auth.LoginRequest;
-import com.restaurantQueue.RestaurantQueue.request.Auth.RegisterRequest;
+import com.restaurantQueue.RestaurantQueue.dto.request.Auth.LoginRequest;
+import com.restaurantQueue.RestaurantQueue.dto.request.Auth.RegisterRequest;
+import com.restaurantQueue.RestaurantQueue.model.User.User;
+import com.restaurantQueue.RestaurantQueue.service.Auth.AuthService;
 import com.restaurantQueue.RestaurantQueue.service.Auth.JwtService;
 import com.restaurantQueue.RestaurantQueue.service.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,18 +21,18 @@ public class UserController {
     private UserService userService;
 
     @Autowired
+    private AuthService authService;
+
+    @Autowired
     private JwtService jwtService;
 
     @Autowired
     AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) {
-        if (registerRequest.getUsername() == null || registerRequest.getPassword() == null) {
-            throw new IllegalArgumentException("Username and password must not be null");
-        }
-        userService.saveUser(registerRequest);
-        return new ResponseEntity<>("Register successfully", HttpStatus.CREATED);
+    public ResponseEntity<User> register(@RequestBody RegisterRequest registerRequest) {
+        var response = authService.register(registerRequest);
+        return new ResponseEntity<User>(response, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")

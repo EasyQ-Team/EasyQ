@@ -2,7 +2,7 @@ package com.restaurantQueue.RestaurantQueue.helper;
 
 import com.restaurantQueue.RestaurantQueue.model.Menu.MenuCategory;
 import com.restaurantQueue.RestaurantQueue.model.Menu.MenuItems;
-import com.restaurantQueue.RestaurantQueue.request.Menu.MenuCategoryRequest;
+import com.restaurantQueue.RestaurantQueue.dto.request.Menu.MenuCategoryRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

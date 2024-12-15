@@ -2,7 +2,7 @@ package com.restaurantQueue.RestaurantQueue.service.User;
 
 import com.restaurantQueue.RestaurantQueue.model.User.User;
 import com.restaurantQueue.RestaurantQueue.repository.UserRepository;
-import com.restaurantQueue.RestaurantQueue.request.Auth.RegisterRequest;
+import com.restaurantQueue.RestaurantQueue.dto.request.Auth.RegisterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

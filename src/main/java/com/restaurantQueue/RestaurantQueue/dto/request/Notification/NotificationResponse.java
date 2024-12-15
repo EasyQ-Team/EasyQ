@@ -1,4 +1,4 @@
-package com.restaurantQueue.RestaurantQueue.request.Notification;
+package com.restaurantQueue.RestaurantQueue.dto.request.Notification;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
