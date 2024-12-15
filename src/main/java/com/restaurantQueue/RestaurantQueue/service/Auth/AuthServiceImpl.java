@@ -8,6 +8,7 @@ import com.restaurantQueue.RestaurantQueue.helper.EmailValidator;
 import com.restaurantQueue.RestaurantQueue.helper.PasswordValidator;
 import com.restaurantQueue.RestaurantQueue.model.User.User;
 import com.restaurantQueue.RestaurantQueue.repository.UserRepository;
+import com.restaurantQueue.RestaurantQueue.service.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,15 +18,27 @@ import java.util.Optional;
 @Service
 public class AuthServiceImpl implements AuthService{
 
-    private final EmailValidator emailValidator = new EmailValidator();
-    private final PasswordValidator passwordValidator =new PasswordValidator();
-    private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
+    private final EmailValidator emailValidator;
+    private final PasswordValidator passwordValidator;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     UserRepository userRepository;
 
     @Autowired
     JwtService jwtService;
+
+    @Autowired
+    UserService userService;
+
+    public AuthServiceImpl() {
+
+        emailValidator =new EmailValidator();
+        passwordValidator =new PasswordValidator();
+        bCryptPasswordEncoder =new BCryptPasswordEncoder(12);
+    }
+
+
 
     @Override
     public User register(RegisterRequest registerRequest) {
@@ -40,13 +53,7 @@ public class AuthServiceImpl implements AuthService{
         }
 
         //register the user
-        User user = new User();
-        user.setUsername(registerRequest.getUsername());
-        user.setEmail(registerRequest.getEmail());
-        user.setPhoneNumber(registerRequest.getPhoneNumber());
-        user.setPassword(bCryptPasswordEncoder.encode(registerRequest.getPassword()));
-        user.setRoles(registerRequest.getRoles());
-        userRepository.save(user);
+        userService.saveUser(registerRequest);
 
         //fetch the user generate token and return response
         User responseUser = userRepository.findByEmail(registerRequest.getEmail()).orElseThrow(
