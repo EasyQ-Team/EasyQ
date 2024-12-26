@@ -1,9 +1,11 @@
 package com.restaurantQueue.RestaurantQueue.helper;
 
 import com.restaurantQueue.RestaurantQueue.exceptions.ValidatorException;
+import org.springframework.stereotype.Component;
 
 import java.util.regex.Pattern;
 
+@Component
 public class EmailValidator implements Validator<String>{
 
     private static final String EMAIL_REGEX = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";

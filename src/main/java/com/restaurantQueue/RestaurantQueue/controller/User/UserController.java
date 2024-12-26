@@ -2,6 +2,7 @@ package com.restaurantQueue.RestaurantQueue.controller.User;
 
 import com.restaurantQueue.RestaurantQueue.dto.request.Auth.LoginRequest;
 import com.restaurantQueue.RestaurantQueue.dto.request.Auth.RegisterRequest;
+import com.restaurantQueue.RestaurantQueue.dto.response.ResponseWrapper;
 import com.restaurantQueue.RestaurantQueue.model.User.User;
 import com.restaurantQueue.RestaurantQueue.service.Auth.AuthService;
 import com.restaurantQueue.RestaurantQueue.service.Auth.JwtService;
@@ -38,18 +39,16 @@ public class UserController {
     AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<ResponseWrapper<User>> register(@RequestBody RegisterRequest registerRequest) {
         var response = authService.register(registerRequest);
-        return new ResponseEntity<User>(response, HttpStatus.CREATED);
+        return new ResponseEntity<ResponseWrapper<User>>(response, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-        if (authentication.isAuthenticated()) {
-            return jwtService.generateToken(loginRequest.getEmail());
-        } else {
-            return "Failed";
-        }
+    public ResponseEntity<ResponseWrapper<User>> login(@RequestBody LoginRequest loginRequest) {
+
+        var response = authService.login(loginRequest);
+        return new ResponseEntity<ResponseWrapper<User>>(response, HttpStatus.OK);
+
     }
 }

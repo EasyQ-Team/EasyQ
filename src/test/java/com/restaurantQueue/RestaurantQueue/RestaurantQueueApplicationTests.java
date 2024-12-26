@@ -10,18 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 class RestaurantQueueApplicationTests {
 
 
-	@Autowired
-	private AuthService authService;
-
 	@Test
 	void contextLoads() {
 	}
 
-	@Test
-	void testRegister(RegisterRequest request){
-		var user = authService.register(request);
-
-
-	}
 
 }

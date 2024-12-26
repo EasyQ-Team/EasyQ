@@ -1,6 +1,6 @@
 package com.restaurantQueue.RestaurantQueue.dto.request.Menu;
 
-import com.google.firebase.database.annotations.NotNull;
+//import com.google.firebase.database.annotations.NotNull;
 import lombok.Data;
 
 @Data
@@ -9,7 +9,7 @@ public class MenuItemRequest {
 
     private String description;
 
-    @NotNull
+//    @NotNull
     private Double price;
 
     private String imageUrl;

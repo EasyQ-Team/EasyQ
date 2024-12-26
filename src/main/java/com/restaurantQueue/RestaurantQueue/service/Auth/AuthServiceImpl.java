@@ -2,82 +2,112 @@ package com.restaurantQueue.RestaurantQueue.service.Auth;
 
 import com.restaurantQueue.RestaurantQueue.dto.request.Auth.LoginRequest;
 import com.restaurantQueue.RestaurantQueue.dto.request.Auth.RegisterRequest;
+import com.restaurantQueue.RestaurantQueue.dto.response.ResponseWrapper;
+import com.restaurantQueue.RestaurantQueue.exceptions.AuthenticationException;
 import com.restaurantQueue.RestaurantQueue.exceptions.UserAlreadyExistException;
 import com.restaurantQueue.RestaurantQueue.exceptions.UserNotFoundException;
 import com.restaurantQueue.RestaurantQueue.helper.EmailValidator;
 import com.restaurantQueue.RestaurantQueue.helper.PasswordValidator;
 import com.restaurantQueue.RestaurantQueue.model.User.User;
 import com.restaurantQueue.RestaurantQueue.repository.UserRepository;
-import com.restaurantQueue.RestaurantQueue.service.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
-public class AuthServiceImpl implements AuthService{
+public class AuthServiceImpl implements AuthService {
 
-    private final EmailValidator emailValidator;
-    private final PasswordValidator passwordValidator;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+  private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired
-    UserRepository userRepository;
+  @Autowired private EmailValidator emailValidator;
 
-    @Autowired
-    JwtService jwtService;
+  @Autowired private PasswordValidator passwordValidator;
 
+  @Autowired private UserRepository userRepository;
 
-    public AuthServiceImpl() {
-        emailValidator =new EmailValidator();
-        passwordValidator =new PasswordValidator();
-        bCryptPasswordEncoder =new BCryptPasswordEncoder(12);
+  @Autowired private JwtService jwtService;
+
+  @Autowired AuthenticationManager authenticationManager;
+
+  public AuthServiceImpl() {
+    bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
+  }
+
+  @Override
+  public ResponseWrapper<User> register(RegisterRequest registerRequest) {
+
+    // check the register parameter  and validation of email and password
+    checkEmailAndPassword(registerRequest.getEmail(), registerRequest.getPassword());
+
+    // check the email is already register or not
+    if (userRepository.existsByEmail(registerRequest.getEmail())) {
+      throw new UserAlreadyExistException("User already registered by this email!");
     }
 
-    @Override
-    public User register(RegisterRequest registerRequest) {
+    // register the user
+    User user = new User();
+    user.setUsername(registerRequest.getUsername());
+    user.setEmail(registerRequest.getEmail());
+    user.setPhoneNumber(registerRequest.getPhoneNumber());
+    user.setPassword(bCryptPasswordEncoder.encode(registerRequest.getPassword()));
+    user.setRoles(registerRequest.getRoles());
 
-        //check the register parameter  and validation of email and password
-        emailValidator.validate(registerRequest.getEmail());
-        passwordValidator.validate(registerRequest.getPassword());
+    userRepository.save(user);
 
-        //check the email is already register or not
-        if (userRepository.existsByEmail(registerRequest.getEmail())) {
-            throw new UserAlreadyExistException("User already registered by this email!");
-        }
+    return retrieveUserSetTokenAndRetrieve(registerRequest.getEmail());
+  }
 
-        //register the user
-        User user = new User();
-        user.setUsername(registerRequest.getUsername());
-        user.setEmail(registerRequest.getEmail());
-        user.setPhoneNumber(registerRequest.getPhoneNumber());
-        user.setPassword(bCryptPasswordEncoder.encode(registerRequest.getPassword()));
-        user.setRoles(registerRequest.getRoles());
+  @Override
+  public ResponseWrapper<User> login(LoginRequest loginRequest) {
 
-        userRepository.save(user);
+    // check email and password validation
+    checkEmailAndPassword(loginRequest.getEmail(), loginRequest.getPassword());
 
-        //fetch the user generate token and return response
-        User responseUser = userRepository.findByEmail(registerRequest.getEmail()).orElseThrow(
-                ()-> new UserNotFoundException("Something went wrong!")
-        );
+    // check the user is exit or not by email
+    userRepository
+        .findByEmail(loginRequest.getEmail())
+        .orElseThrow(
+            () -> new UserNotFoundException("Customer not found!,Please check your email"));
+    System.out.println("authenicate== ");
 
-        var token = jwtService.generateToken(registerRequest.getEmail());
-        responseUser.setToken(token);
-
-        return responseUser;
+    // check the user is authenicated or not
+    try {
+      Authentication authentication =
+          authenticationManager.authenticate(
+              new UsernamePasswordAuthenticationToken(
+                  loginRequest.getEmail(), loginRequest.getPassword()));
+      if (authentication.isAuthenticated()) {
+        return retrieveUserSetTokenAndRetrieve(loginRequest.getEmail());
+      } else {
+        throw new AuthenticationException("Invalid email or password");
+      }
+    } catch (RuntimeException e) {
+      throw new AuthenticationException("Invalid email or password");
     }
+  }
 
-    @Override
-    public Optional<User> login(LoginRequest loginRequest) {
+  private void checkEmailAndPassword(String email, String password) {
+    emailValidator.validate(email);
+    passwordValidator.validate(password);
+  }
 
-        //check email and password validation
+  private ResponseWrapper<User> retrieveUserSetTokenAndRetrieve(String email) {
 
+    String token = jwtService.generateToken(email);
 
-        //check the user is authenicated or not
+    User responseUser =
+        userRepository
+            .findByEmail(email)
+            .orElseThrow(
+                () -> new UserNotFoundException("Customer not found!,Please check your email"));
 
-
-        //return the user with token
-        return Optional.empty();
-    }
+    responseUser.setToken(token);
+    ResponseWrapper<User> responseWrapper = new ResponseWrapper<>();
+    responseWrapper.setSuccess(true);
+    responseWrapper.setResult(responseUser);
+    return responseWrapper;
+  }
 }

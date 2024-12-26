@@ -32,9 +32,9 @@ public class QueueService {
         User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UserNotFoundException("User Not Found"));
 
-        if (user.getQueue() != null) {
-            throw new UserAlreadyExistException("User is already in the queue");
-        }
+//        if (user.getQueue() != null) {
+//            throw new UserAlreadyExistException("User is already in the queue");
+//        }
 
         int nextQueuePosition = queueRepository.countPendingQueues() + 1;
 
@@ -44,7 +44,7 @@ public class QueueService {
 
         queueRepository.save(queue);
 
-        user.setQueue(queue);
+//        user.setQueue(queue);
         userRepository.save(user);
     }
 

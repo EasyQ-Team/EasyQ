@@ -1,11 +1,16 @@
 package com.restaurantQueue.RestaurantQueue.dto.response;
 
 
+import lombok.Data;
+import lombok.Getter;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+@Data
 public class ErrorResponse {
 
-    private int statusCode;
-    private String title;
-    private String message;
+    private final int statusCode;
+    private final String title;
+    private final String message;
 
 
     public ErrorResponse(int statusCode, String title, String message) {
