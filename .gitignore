@@ -4,7 +4,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-resource/
+# Ignore firebase credentials
+src/main/resources/queue-99641-firebase-adminsdk-w0fud-bd84c2143c.json
 
 ### STS ###
 .apt_generated
